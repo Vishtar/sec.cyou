@@ -72,6 +72,9 @@ export const Filter = ({ data, tags, chains, onUpdate }) => {
                 )}
             </div>
         </div>
-        <span id="clear-filter" onClick={onReset}>[reset]</span>
+        {filterTags.length || filterChains.length || filterText
+            ? <span id="clear-filter" onClick={onReset}>[reset]</span>
+            : null
+        }
     </div>
 }

@@ -4,7 +4,7 @@ import './style.css';
 
 export const Chain = ({ onClick, className, name }) => {
     return <span
-        className={joinClassName(["item-chain-logo", className])}
+        className={joinClassName(["card-chain-logo", className])}
         title={name}
         style={{
             backgroundImage: `url('./assets/logos/${name}.svg')`,

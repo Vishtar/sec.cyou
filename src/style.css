@@ -73,6 +73,10 @@ a:visited {
     flex: 999 999 auto;
 }
 
+#filter {
+    margin-bottom: 16px;
+}
+
 #edit-link {
     background-color: rgba(0,0,0,0.6);
     text-decoration: none;
