@@ -28,7 +28,11 @@ export const Filter = ({ data, tags, chains, onUpdate }) => {
         let filtered = data;
 
         const filteredTags = Object.keys(filterTags);
-        if (filteredTags.length) filtered = filtered.filter(platform => filteredTags.some(filteredTag => platform.tags.includes(filteredTag)))
+        if (filteredTags.length) filtered = filtered.filter(platform => filteredTags.some(filteredTag => {
+            if (filteredTag.toLowerCase().search('ecosystem') !== -1)
+                return platform.tags.some(tag => tag.toLowerCase().search('ecosystem') !== -1);
+            return platform.tags.includes(filteredTag)
+        }));
 
         const filteredChains = Object.keys(filterChains);
         if (filteredChains.length) filtered = filtered.filter(platform => filteredChains.some(filteredChain => platform.chains.includes(filteredChain)))
@@ -48,7 +52,6 @@ export const Filter = ({ data, tags, chains, onUpdate }) => {
             onChange={event => setFilterText(event.target.value)}
         />
         <div className="search-tags">
-            <span>Filtering by tags:</span>
             <div className="tags">
                 {Object.keys(tags).map(tagName =>
                     <Tag
@@ -61,7 +64,6 @@ export const Filter = ({ data, tags, chains, onUpdate }) => {
             </div>
         </div>
         <div className="search-chains">
-            <span>Filtering by chains:</span>
             <div className='chains'>
                 {chains.map(chainName =>
                     <ChainTag

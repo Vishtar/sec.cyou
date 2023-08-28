@@ -11,12 +11,18 @@ export const App = () => {
     const [filteredList, setFilteredList] = useState(list);
     const [tagColors, setTagColors] = useState({});
     const [chains, setChains] = useState([]);
+    const [filterTags, setFilterTags] = useState([]);
     const colorHash = new ColorHash({ lightness: [0.8, 0.9] });
 
     const onUpdateFilter = (filteredList) => setFilteredList(filteredList);
 
-    const onClickTag = (name) => {}
-    const onClickChain = (name) => {}
+    const onClickTag = (name) => {
+        console.log({name})
+    }
+
+    const onClickChain = (name) => {
+        console.log({name})
+    }
 
     useEffect(() => {
         const colorsByTag = {};
@@ -31,13 +37,23 @@ export const App = () => {
         });
         setTagColors(colorsByTag);
         setChains([...chainList]);
+
+        // Collecting ecosystem tags into a single one
+        const newFilterTags = Object.keys(colorsByTag).reduce((acc, tag) => {
+            if (tag.toLowerCase().search('ecosystem') === -1) acc[tag] = null;
+            return acc;
+        }, {})
+        setFilterTags({
+            ...newFilterTags,
+            ecosystem: null,
+        });
     }, []);
 
     return (
         <tagColorsContext.Provider value={tagColors}>
             <Filter
                 data={list}
-                tags={tagColors}
+                tags={filterTags}
                 chains={chains}
                 onUpdate={onUpdateFilter}
             />

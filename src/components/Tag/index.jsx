@@ -4,7 +4,7 @@ import { classNameByObject } from '../../helpers/classNameByObject';
 import './style.css';
 
 export const Tag = ({ isActive, isFiltered, onClick, children }) => {
-    const tagColors = useTagColors()
+    const tagColors = useTagColors();
 
     return (
         <span
