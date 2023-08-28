@@ -2,7 +2,7 @@ import { Tag, Chain } from '../';
 
 import './style.css';
 
-export const Card = ({ data }) => {
+export const Card = ({ data, onClickTag }) => {
     const Chains = () => data.chains.map(chain => <Chain name={chain} key={chain} />);
 
     const Tags = () => data.tags.map(tag => <Tag key={tag}>{tag}</Tag>)

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import fuzzysort from 'fuzzysort';
 import { Tag, ChainTag } from '../';
-import { toogleBooleanByObjectKey } from '../../helpers/toogleBooleanByObjectKey'
+import { toogleTrueOrDeleteByObjectKey } from '../../helpers/toogleTrueOrDeleteByObjectKey'
 
 import './style.css';
 
@@ -11,11 +11,11 @@ export const Filter = ({ data, tags, chains, onUpdate }) => {
     const [filterText, setFilterText] = useState('');
 
     const onClickTag = (tagName) => {
-        setFilterTags(prevFilterTags => toogleBooleanByObjectKey(prevFilterTags, tagName));
+        setFilterTags(prevFilterTags => toogleTrueOrDeleteByObjectKey(prevFilterTags, tagName));
     }
 
     const onClickChain = (chainName) => {
-        setFilterChains(prevFilterChains => toogleBooleanByObjectKey(prevFilterChains, chainName));
+        setFilterChains(prevFilterChains => toogleTrueOrDeleteByObjectKey(prevFilterChains, chainName));
     }
 
     const onReset = () => {
@@ -27,10 +27,10 @@ export const Filter = ({ data, tags, chains, onUpdate }) => {
     useEffect(() => {
         let filtered = data;
 
-        const filteredTags = Object.keys(filterTags).filter(filterTag => filterTags[filterTag]);
+        const filteredTags = Object.keys(filterTags);
         if (filteredTags.length) filtered = filtered.filter(platform => filteredTags.some(filteredTag => platform.tags.includes(filteredTag)))
 
-        const filteredChains = Object.keys(filterChains).filter(filterChain => filterChains[filterChain]);
+        const filteredChains = Object.keys(filterChains);
         if (filteredChains.length) filtered = filtered.filter(platform => filteredChains.some(filteredChain => platform.chains.includes(filteredChain)))
 
         if (filterText) {
@@ -51,6 +51,7 @@ export const Filter = ({ data, tags, chains, onUpdate }) => {
             <span>Filtering by tags:</span>
             <div className="tags">
                 {Object.keys(tags).map(tagName =>
+                    
                     <Tag
                         isActive={filterTags[tagName]}
                         key={tagName}
@@ -72,7 +73,7 @@ export const Filter = ({ data, tags, chains, onUpdate }) => {
                 )}
             </div>
         </div>
-        {filterTags.length || filterChains.length || filterText
+        {Object.keys(filterTags).length || Object.keys(filterChains).length || filterText
             ? <span id="clear-filter" onClick={onReset}>[reset]</span>
             : null
         }
