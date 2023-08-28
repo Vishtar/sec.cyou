@@ -1,0 +1,16 @@
+.tag {
+    padding: 4px 6px;
+    border-radius: 3px;
+    font-size: 60%;
+    text-transform: uppercase;
+    color: #222;
+    cursor: pointer;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.isActive {
+    outline-color: red;
+    outline-width: 5px;
+    outline-style: dashed;
+}
