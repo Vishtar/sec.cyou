@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "vite serve",
-    "build": "vite build"
+    "build": "vite build --emptyOutDir"
   },
   "author": "sec.cyou",
   "license": "ISC",

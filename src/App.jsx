@@ -11,7 +11,7 @@ export const App = () => {
     const [filteredList, setFilteredList] = useState(list);
     const [tagColors, setTagColors] = useState({});
     const [chains, setChains] = useState([]);
-    const [filterTags, setFilterTags] = useState([]);
+    const [filterTags, setFilterTags] = useState({});
     const colorHash = new ColorHash({ lightness: [0.8, 0.9] });
 
     const onUpdateFilter = (filteredList) => setFilteredList(filteredList);
@@ -29,8 +29,8 @@ export const App = () => {
         const chainList = new Set();
         list.forEach(platform => {
             platform.tags.forEach(tag => {
-                if (tag in colorsByTag) return;
                 const tagLowerCase = tag.toLowerCase();
+                if (tagLowerCase in colorsByTag) return;
                 colorsByTag[tagLowerCase] = colorHash.hex(tagLowerCase);
             });
             platform.chains.forEach(chain => chainList.add(chain));
@@ -40,7 +40,7 @@ export const App = () => {
 
         // Collecting ecosystem tags into a single one
         const newFilterTags = Object.keys(colorsByTag).reduce((acc, tag) => {
-            if (tag.toLowerCase().search('ecosystem') === -1) acc[tag] = null;
+            if (tag.toLowerCase().search('ecosystem') === -1) acc[tag.toLowerCase()] = null;
             return acc;
         }, {})
         setFilterTags({
