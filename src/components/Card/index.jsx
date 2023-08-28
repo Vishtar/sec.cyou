@@ -2,10 +2,10 @@ import { Tag, Chain } from '../';
 
 import './style.css';
 
-export const Card = ({ data, onClickTag }) => {
-    const Chains = () => data.chains.map(chain => <Chain name={chain} key={chain} />);
+export const Card = ({ data, onClickTag, onClickChain }) => {
+    const Chains = () => data.chains.map(chain => <Chain name={chain} key={chain} onClick={() => onClickChain(chain)} />);
 
-    const Tags = () => data.tags.map(tag => <Tag key={tag}>{tag}</Tag>)
+    const Tags = () => data.tags.map(tag => <Tag key={tag} onClick={() => onClickTag(tag)}>{tag}</Tag>)
 
     return <div className="card">
         <div className="card-contents">

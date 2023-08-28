@@ -51,9 +51,9 @@ export const Filter = ({ data, tags, chains, onUpdate }) => {
             <span>Filtering by tags:</span>
             <div className="tags">
                 {Object.keys(tags).map(tagName =>
-                    
                     <Tag
                         isActive={filterTags[tagName]}
+                        isFiltered={Object.keys(filterTags).length}
                         key={tagName}
                         onClick={() => onClickTag(tagName)}
                     >{tagName}</Tag>
@@ -66,6 +66,7 @@ export const Filter = ({ data, tags, chains, onUpdate }) => {
                 {chains.map(chainName =>
                     <ChainTag
                         isActive={filterChains[chainName]}
+                        isFiltered={Object.keys(filterChains).length}
                         name={chainName}
                         onClick={() => onClickChain(chainName)}
                         key={chainName}

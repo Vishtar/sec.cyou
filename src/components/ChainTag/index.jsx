@@ -1,10 +1,14 @@
 import { Chain } from "../";
-import { joinClassName } from '../../helpers/joinClassName';
+import { classNameByObject } from '../../helpers/classNameByObject';
 
 import './style.css';
 
-export const ChainTag = ({ isActive, onClick, ...props }) => {
-    return <div className={joinClassName(["chain-tag", isActive ? 'isActive' : null])} onClick={onClick}>
+export const ChainTag = ({ isActive, isFiltered, onClick, ...props }) => {
+    return <div className={classNameByObject({
+            "chain-tag": true,
+            isActive,
+            isBlackedOut: !isActive && isFiltered,
+        })} onClick={onClick}>
         <span className="chain-tag__name">{props.name}</span>
         <Chain className="small" {...props} />
     </div>

@@ -17,9 +17,3 @@
     white-space: nowrap;
     align-self: center;
 }
-
-.isActive {
-    outline-color: red;
-    outline-width: 5px;
-    outline-style: dashed;
-}

@@ -1,14 +1,18 @@
 import { useTagColors } from '../../hooks/useTagColors';
-import { joinClassName } from '../../helpers/joinClassName';
+import { classNameByObject } from '../../helpers/classNameByObject';
 
 import './style.css';
 
-export const Tag = ({ isActive, onClick, children }) => {
+export const Tag = ({ isActive, isFiltered, onClick, children }) => {
     const tagColors = useTagColors()
 
     return (
         <span
-            className={joinClassName(['tag', isActive ? 'isActive' : null])}
+            className={classNameByObject({
+                tag: true,
+                isActive,
+                isBlackedOut: !isActive && isFiltered,
+            })}
             style={{
                 backgroundColor: tagColors[children.toLowerCase()]
             }}

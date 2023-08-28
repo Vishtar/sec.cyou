@@ -15,6 +15,9 @@ export const App = () => {
 
     const onUpdateFilter = (filteredList) => setFilteredList(filteredList);
 
+    const onClickTag = (name) => {}
+    const onClickChain = (name) => {}
+
     useEffect(() => {
         const colorsByTag = {};
         const chainList = new Set();
@@ -38,7 +41,11 @@ export const App = () => {
                 chains={chains}
                 onUpdate={onUpdateFilter}
             />
-            <Cards list={filteredList} />
+            <Cards
+                list={filteredList}
+                onClickTag={onClickTag}
+                onClickChain={onClickChain}
+            />
         </tagColorsContext.Provider>
     )
 };

@@ -49,6 +49,10 @@ a:visited {
     padding-right: 6px;
 }
 
+.isBlackedOut {
+    opacity: 0.5;
+}
+
 .outer {
     width: 100%;
     max-width: 900px;
