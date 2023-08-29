@@ -2,63 +2,73 @@ import { useState, useEffect } from 'react';
 import fuzzysort from 'fuzzysort';
 import { Tag, ChainTag } from '../';
 import { toogleTrueOrDeleteByObjectKey } from '../../helpers/toogleTrueOrDeleteByObjectKey'
+import { defaultFilterData } from './consts/defaultFilterData'
 
 import './style.css';
 
-export const Filter = ({ data, tags, chains, onUpdate }) => {
-    const [filterTags, setFilterTags] = useState({});
-    const [filterChains, setFilterChains] = useState({});
-    const [filterText, setFilterText] = useState('');
+export const Filter = ({ data, filterData, tags, chains, onUpdate, onUpdateFilter }) => {
+    const [filter, setFilter] = useState(filterData || defaultFilterData);
 
-    const onClickTag = (tagName) => {
-        setFilterTags(prevFilterTags => toogleTrueOrDeleteByObjectKey(prevFilterTags, tagName));
-    }
-
-    const onClickChain = (chainName) => {
-        setFilterChains(prevFilterChains => toogleTrueOrDeleteByObjectKey(prevFilterChains, chainName));
+    const onChangeFilter = (field, updatedValue) => {
+        setFilter(prevFilter => {
+            const newValue = field === 'text'
+                ? updatedValue
+                : toogleTrueOrDeleteByObjectKey(prevFilter[field], updatedValue)
+            return {
+                ...prevFilter,
+                [field]: newValue
+            }
+        });
     }
 
     const onReset = () => {
-        setFilterTags({});
-        setFilterChains({});
-        setFilterText('');
+        setFilter(defaultFilterData);
     }
 
     useEffect(() => {
         let filtered = data;
 
-        const filteredTags = Object.keys(filterTags);
-        if (filteredTags.length) filtered = filtered.filter(platform => filteredTags.some(filteredTag => {
+        const filteredTags = Object.keys(filter.tags);
+        if (filteredTags.length)
+            filtered = filtered.filter(platform => filteredTags.some(filteredTag => {
             if (filteredTag.search('ecosystem') !== -1)
                 return platform.tags.some(tag => tag.search('ecosystem') !== -1);
-            return platform.tags.includes(filteredTag)
+            return platform.tags.includes(filteredTag);
         }));
 
-        const filteredChains = Object.keys(filterChains);
-        if (filteredChains.length) filtered = filtered.filter(platform => filteredChains.some(filteredChain => platform.chains.includes(filteredChain)))
+        const filteredChains = Object.keys(filter.chains);
+        if (filteredChains.length)
+            filtered = filtered.filter(platform => filteredChains.some(filteredChain => platform.chains.includes(filteredChain)))
 
-        if (filterText) {
-            const fuzzyResult = fuzzysort.go(filterText, filtered, { keys: ['name', 'description'] });
-            if (fuzzyResult) filtered = fuzzyResult.map(fuzziedObj => fuzziedObj.obj)
+        if (filter.text) {
+            const fuzzyResult = fuzzysort.go(filter.text, filtered, { keys: ['name', 'description'] });
+            if (fuzzyResult)
+                filtered = fuzzyResult.map(fuzziedObj => fuzziedObj.obj)
         }
 
         onUpdate(filtered);
-    }, [filterTags, filterText, filterChains]);
+        onUpdateFilter(filter);
+    }, [filter]);
+
+    useEffect(() => {
+        if (!filterData) return;
+        setFilter(filterData);
+    }, [filterData]);
 
     return <div id="filter">
         <input
             placeholder="Search by Name or Description"
-            value={filterText}
-            onChange={event => setFilterText(event.target.value)}
+            value={filter.text}
+            onChange={event => onChangeFilter('text', event.target.value)}
         />
         <div className="search-tags">
             <div className="tags">
                 {Object.keys(tags).map(tagName =>
                     <Tag
-                        isActive={filterTags[tagName]}
-                        isFiltered={Object.keys(filterTags).length}
+                        isActive={filter.tags[tagName]}
+                        isFiltered={Object.keys(filter.tags).length}
                         key={tagName}
-                        onClick={() => onClickTag(tagName)}
+                        onClick={() => onChangeFilter('tags', tagName)}
                     >{tagName}</Tag>
                 )}
             </div>
@@ -67,16 +77,16 @@ export const Filter = ({ data, tags, chains, onUpdate }) => {
             <div className='chains'>
                 {chains.map(chainName =>
                     <ChainTag
-                        isActive={filterChains[chainName]}
-                        isFiltered={Object.keys(filterChains).length}
+                        isActive={filter.chains[chainName]}
+                        isFiltered={Object.keys(filter.chains).length}
                         name={chainName}
-                        onClick={() => onClickChain(chainName)}
+                        onClick={() => onChangeFilter('chains', chainName)}
                         key={chainName}
                     />
                 )}
             </div>
         </div>
-        {Object.keys(filterTags).length || Object.keys(filterChains).length || filterText
+        {Object.keys(filter.tags).length || Object.keys(filter.chains).length || filter.text
             ? <span id="clear-filter" onClick={onReset}>[reset]</span>
             : null
         }
