@@ -23,7 +23,7 @@ export const App = () => {
             // let newValue = value;
             // if (newValue.toLowerCase().search('ecosystem') !== -1) newValue = 'ecosystem'
             return {
-                ...prevFilter,
+                ...defaultFilterData,
                 [field]: {
                     [newValue]: true,
                 },
@@ -34,8 +34,11 @@ export const App = () => {
     useEffect(() => {
         const colorsByTag = {};
         const chainList = new Set();
+        const newFilterTags = {};
+
         list.forEach(platform => {
             platform.tags.forEach(tag => {
+                if (tag.toLowerCase().search('ecosystem') === -1) newFilterTags[tag] = null;
                 const tagLowerCase = tag.toLowerCase();
                 if (tagLowerCase in colorsByTag) return;
                 colorsByTag[tagLowerCase] = colorHash.hex(tagLowerCase);
@@ -44,12 +47,6 @@ export const App = () => {
         });
         setTagColors(colorsByTag);
         setChains([...chainList]);
-
-        // Collecting ecosystem tags into a single one
-        const newFilterTags = Object.keys(colorsByTag).reduce((acc, tag) => {
-            if (tag.toLowerCase().search('ecosystem') === -1) acc[tag.toLowerCase()] = null;
-            return acc;
-        }, {})
         setFilterTags({
             ...newFilterTags,
             ecosystem: null,
