@@ -38,8 +38,8 @@ export const App = () => {
 
         list.forEach(platform => {
             platform.tags.forEach(tag => {
-                if (tag.toLowerCase().search('ecosystem') === -1) newFilterTags[tag] = null;
                 const tagLowerCase = tag.toLowerCase();
+                if (tagLowerCase === 'ecosystem' || tagLowerCase.search('ecosystem') === -1) newFilterTags[tag] = null;
                 if (tagLowerCase in colorsByTag) return;
                 colorsByTag[tagLowerCase] = colorHash.hex(tagLowerCase);
             });
@@ -47,10 +47,7 @@ export const App = () => {
         });
         setTagColors(colorsByTag);
         setChains([...chainList]);
-        setFilterTags({
-            ...newFilterTags,
-            ecosystem: null,
-        });
+        setFilterTags(newFilterTags);
     }, []);
 
     return (

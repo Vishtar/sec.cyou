@@ -31,7 +31,7 @@ export const Filter = ({ data, filterData, tags, chains, onUpdate, onUpdateFilte
         const filteredTags = Object.keys(filter.tags);
         if (filteredTags.length)
             filtered = filtered.filter(platform => filteredTags.some(filteredTag => {
-            if (filteredTag.search('ecosystem') !== -1)
+            if (filteredTag === 'ecosystem')
                 return platform.tags.some(tag => tag.search('ecosystem') !== -1);
             return platform.tags.includes(filteredTag);
         }));
