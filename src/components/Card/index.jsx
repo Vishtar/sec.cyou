@@ -13,7 +13,7 @@ export const Card = ({ data, onClickTag, onClickChain }) => {
                 <a className="card-link" href={data.website} target="_blank">
                     <span className="card-name">
                         {data.name}
-                        <img src="./assets/link.svg" className="link-icon" />
+                        <img src="./assets/link.svg" className="link-icon" alt="" />
                     </span>
                 </a>
                 <span className="card-chains">

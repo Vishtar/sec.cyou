@@ -81,6 +81,10 @@ a:visited {
     margin-bottom: 16px;
 }
 
+.center {
+    text-align: center;
+}
+
 #edit-link {
     background-color: rgba(0,0,0,0.6);
     text-decoration: none;

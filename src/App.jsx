@@ -1,29 +1,22 @@
-import { useState, useEffect } from 'react';
-import colorHashModule from 'color-hash';
+import { useState } from 'react';
 
 import { Filter } from './components/Filter';
 import { Cards } from './components';
 import { tagColorsContext } from './hooks/useTagColors/tagColorsContext'
 import { defaultFilterData } from './components/Filter/consts/defaultFilterData'
+import { getTagsAndChains } from './helpers/getTagsAndChains'
 
 import list from './list.json';
 
-const ColorHash = colorHashModule.default;
-
 export const App = () => {
     const [filteredList, setFilteredList] = useState(list);
-    const [tagColors, setTagColors] = useState({});
     const [filterData, setFilterData] = useState(defaultFilterData);
-    const [chains, setChains] = useState([]);
-    const [filterTags, setFilterTags] = useState({});
-    const colorHash = new ColorHash({ lightness: [0.8, 0.9] });
+    const {colorsByTag, chainList, filterTags } = getTagsAndChains();
 
     const onUpdateFilter = (filteredList) => setFilteredList(filteredList);
 
     const onClickCardFilter = (field, newValue) => {
         setFilterData(prevFilter => {
-            // let newValue = value;
-            // if (newValue.toLowerCase().search('ecosystem') !== -1) newValue = 'ecosystem'
             return {
                 ...defaultFilterData,
                 [field]: {
@@ -33,32 +26,13 @@ export const App = () => {
         });
     }
 
-    useEffect(() => {
-        const colorsByTag = {};
-        const chainList = new Set();
-        const newFilterTags = {};
-
-        list.forEach(platform => {
-            platform.tags.forEach(tag => {
-                const tagLowerCase = tag.toLowerCase();
-                if (tagLowerCase === 'ecosystem' || tagLowerCase.search('ecosystem') === -1) newFilterTags[tag] = null;
-                if (tagLowerCase in colorsByTag) return;
-                colorsByTag[tagLowerCase] = colorHash.hex(tagLowerCase);
-            });
-            platform.chains.forEach(chain => chainList.add(chain));
-        });
-        setTagColors(colorsByTag);
-        setChains([...chainList]);
-        setFilterTags(newFilterTags);
-    }, []);
-
     return (
-        <tagColorsContext.Provider value={tagColors}>
+        <tagColorsContext.Provider value={colorsByTag}>
             <Filter
                 data={list}
                 filterData={filterData}
                 tags={filterTags}
-                chains={chains}
+                chains={chainList}
                 onUpdate={onUpdateFilter}
                 onUpdateFilter={(data) => setFilterData(data)}
             />
