@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import ColorHash from 'color-hash';
+import colorHashModule from 'color-hash';
 
 import { Filter } from './components/Filter';
 import { Cards } from './components';
@@ -7,6 +7,8 @@ import { tagColorsContext } from './hooks/useTagColors/tagColorsContext'
 import { defaultFilterData } from './components/Filter/consts/defaultFilterData'
 
 import list from './list.json';
+
+const ColorHash = colorHashModule.default;
 
 export const App = () => {
     const [filteredList, setFilteredList] = useState(list);
