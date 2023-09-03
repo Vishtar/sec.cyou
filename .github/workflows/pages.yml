@@ -19,6 +19,7 @@ jobs:
           npm run build
           mkdir build
           cp -r dist/static/* build/
+          cp -r src/assets/* build/assets/
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4.3.3
